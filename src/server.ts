@@ -39,7 +39,7 @@ app.use(
     res.status(500).json({ error: "Internal server error" });
   }
 );
-app.use('/api', routerV1);
+app.use('/api/v1', routerV1);
 
 
 // Initialize database and start server

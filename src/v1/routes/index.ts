@@ -20,9 +20,9 @@ routerV1.get('/', (req, res) => {
     message: 'Task Management API',
     version: '1.0.0',
     endpoints: {
-      users: '/api/users',
-      tasks: '/api/tasks',
-      health: '/api/health'
+      users: '/users',
+      tasks: '/tasks',
+      health: '/health'
     }
   });
 });

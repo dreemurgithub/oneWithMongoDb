@@ -1,6 +1,7 @@
+// services/userService.ts - Updated to use model registry
 import mongoose from 'mongoose';
-import User, { IUser } from '../models/User';
-import Task from '../models/Task';
+import { getUserModel, getTaskModel } from '@/models';
+import { IUser } from '@/models/User';
 
 export interface CreateUserData {
   username: string;
@@ -20,16 +21,15 @@ export class UserService {
    * Create a new user
    */
   static async createUser(userData: CreateUserData): Promise<IUser> {
-    try {
-      const user = new User(userData);
-      await user.save();
-      return user;
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`Failed to create user: ${error.message}`);
-      }
-      throw new Error('Failed to create user: Unknown error');
+    const existingUser = await this.getUserByUsername(userData.username);
+    if (existingUser) {
+      throw new Error('Username already exists');
     }
+
+    const User = getUserModel();
+    const user = new User(userData);
+    await user.save();
+    return user;
   }
 
   /**
@@ -37,6 +37,7 @@ export class UserService {
    */
   static async getUserById(userId: string | mongoose.Types.ObjectId): Promise<IUser | null> {
     try {
+      const User = getUserModel();
       const user = await User.findById(userId);
       return user;
     } catch (error) {
@@ -48,28 +49,29 @@ export class UserService {
   }
 
   /**
-   * Get user by username
+   * Get user by username (null return is expected, not an error)
    */
   static async getUserByUsername(username: string): Promise<IUser | null> {
     try {
-      const user = await User.findOne({ username });
-      return user;
+      const User = getUserModel();
+      return await User.findOne({ username });
     } catch (error) {
       if (error instanceof Error) {
-        throw new Error(`Failed to get user: ${error.message}`);
+        throw new Error(`Database error while finding user: ${error.message}`);
       }
-      throw new Error('Failed to get user: Unknown error');
+      throw new Error('Database error while finding user: Unknown error');
     }
   }
 
   /**
-   * Get user with their tasks populated (One-to-Many relationship)
+   * Get user with their tasks populated
    */
   static async getUserWithTasks(userId: string | mongoose.Types.ObjectId): Promise<IUser | null> {
     try {
+      const User = getUserModel();
       const user = await User.findById(userId).populate({
         path: 'tasks',
-        options: { sort: { createdAt: -1 } } // Sort tasks by newest first
+        options: { sort: { createdAt: -1 } }
       });
       return user;
     } catch (error) {
@@ -81,7 +83,7 @@ export class UserService {
   }
 
   /**
-   * Get all users
+   * Get all users with pagination
    */
   static async getAllUsers(page: number = 1, limit: number = 10): Promise<{
     users: IUser[];
@@ -90,7 +92,9 @@ export class UserService {
     pages: number;
   }> {
     try {
+      const User = getUserModel();
       const skip = (page - 1) * limit;
+      
       const [users, total] = await Promise.all([
         User.find().skip(skip).limit(limit).sort({ createdAt: -1 }),
         User.countDocuments()
@@ -118,6 +122,7 @@ export class UserService {
     updateData: UpdateUserData
   ): Promise<IUser | null> {
     try {
+      const User = getUserModel();
       const user = await User.findByIdAndUpdate(
         userId,
         updateData,
@@ -137,6 +142,7 @@ export class UserService {
    */
   static async deleteUser(userId: string | mongoose.Types.ObjectId): Promise<boolean> {
     try {
+      const User = getUserModel();
       const user = await User.findById(userId);
       if (!user) {
         return false;
@@ -154,17 +160,15 @@ export class UserService {
   }
 
   /**
-   * Check if username exists
+   * Check if username exists (returns boolean, not an error)
    */
   static async usernameExists(username: string): Promise<boolean> {
     try {
-      const user = await User.findOne({ username });
+      const user = await this.getUserByUsername(username);
       return !!user;
     } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`Failed to check username: ${error.message}`);
-      }
-      throw new Error('Failed to check username: Unknown error');
+      // If there's a database error, re-throw it
+      throw error;
     }
   }
 
@@ -178,6 +182,8 @@ export class UserService {
     completionRate: number;
   }> {
     try {
+      const Task = getTaskModel();
+      
       const [totalTasks, completedTasks] = await Promise.all([
         Task.countDocuments({ user: userId }),
         Task.countDocuments({ user: userId, completed: true })
@@ -190,7 +196,7 @@ export class UserService {
         totalTasks,
         completedTasks,
         pendingTasks,
-        completionRate: Math.round(completionRate * 100) / 100 // Round to 2 decimal places
+        completionRate: Math.round(completionRate * 100) / 100
       };
     } catch (error) {
       if (error instanceof Error) {
