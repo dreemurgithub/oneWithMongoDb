@@ -15,6 +15,7 @@ export const createUser = async (
   }
   const user = new User({ name, username, password });
   if(user){
+    await user.save()
     res.send(user)
     return
   }
@@ -48,9 +49,9 @@ export const getAllUsers = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  res.status(500).json({
-    error: "Failed to get users",
-  });
+  const users = await User.find()
+  
+  res.send(users)
 };
 
 // Update user
