@@ -59,6 +59,6 @@ userSchema.pre('deleteOne', { document: true }, async function(next) {
 });
 
 // Create and export the User model
-const User: Model<IUser> = mongoose.model<IUser>('User', userSchema);
+// const User: Model<IUser> = mongoose.model<IUser>('User', userSchema);
 
-export default User;
+export default userSchema;

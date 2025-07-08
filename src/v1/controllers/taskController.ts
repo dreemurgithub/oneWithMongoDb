@@ -289,24 +289,27 @@ export const searchTasks = async (req: Request, res: Response): Promise<void> =>
       return;
     }
 
-    const result = await TaskService.searchTasks(searchTerm, userId, page, limit);
+    // const result = await TaskService.searchTasks(searchTerm, userId, page, limit);
     
-    res.json({
-      searchTerm,
-      tasks: result.tasks.map(task => ({
-        id: task._id,
-        description: task.description,
-        completed: task.completed,
-        user: task.user,
-        createdAt: task.createdAt
-      })),
-      pagination: {
-        page: result.page,
-        pages: result.pages,
-        total: result.total,
-        limit
-      }
-    });
+    // res.json({
+    //   searchTerm,
+    //   tasks: result.tasks.map(task => ({
+    //     id: task._id,
+    //     description: task.description,
+    //     completed: task.completed,
+    //     user: task.user,
+    //     createdAt: task.createdAt
+    //   })),
+    //   pagination: {
+    //     page: result.page,
+    //     pages: result.pages,
+    //     total: result.total,
+    //     limit
+    //   }
+    // });
+    res.send({
+      page,limit,userId
+    })
   } catch (error) {
     res.status(500).json({ 
       error: 'Failed to search tasks',

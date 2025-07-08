@@ -1,7 +1,7 @@
 // services/userService.ts - Updated to use model registry
 import mongoose from 'mongoose';
-import { getUserModel, getTaskModel } from '@/models';
 import { IUser } from '@/models/User';
+import { User,Task } from '@/models';
 
 export interface CreateUserData {
   username: string;
@@ -26,7 +26,6 @@ export class UserService {
       throw new Error('Username already exists');
     }
 
-    const User = getUserModel();
     const user = new User(userData);
     await user.save();
     return user;
@@ -37,7 +36,6 @@ export class UserService {
    */
   static async getUserById(userId: string | mongoose.Types.ObjectId): Promise<IUser | null> {
     try {
-      const User = getUserModel();
       const user = await User.findById(userId);
       return user;
     } catch (error) {
@@ -53,7 +51,6 @@ export class UserService {
    */
   static async getUserByUsername(username: string): Promise<IUser | null> {
     try {
-      const User = getUserModel();
       return await User.findOne({ username });
     } catch (error) {
       if (error instanceof Error) {
@@ -68,7 +65,6 @@ export class UserService {
    */
   static async getUserWithTasks(userId: string | mongoose.Types.ObjectId): Promise<IUser | null> {
     try {
-      const User = getUserModel();
       const user = await User.findById(userId).populate({
         path: 'tasks',
         options: { sort: { createdAt: -1 } }
@@ -92,7 +88,6 @@ export class UserService {
     pages: number;
   }> {
     try {
-      const User = getUserModel();
       const skip = (page - 1) * limit;
       
       const [users, total] = await Promise.all([
@@ -122,7 +117,6 @@ export class UserService {
     updateData: UpdateUserData
   ): Promise<IUser | null> {
     try {
-      const User = getUserModel();
       const user = await User.findByIdAndUpdate(
         userId,
         updateData,
@@ -142,7 +136,6 @@ export class UserService {
    */
   static async deleteUser(userId: string | mongoose.Types.ObjectId): Promise<boolean> {
     try {
-      const User = getUserModel();
       const user = await User.findById(userId);
       if (!user) {
         return false;
@@ -182,8 +175,6 @@ export class UserService {
     completionRate: number;
   }> {
     try {
-      const Task = getTaskModel();
-      
       const [totalTasks, completedTasks] = await Promise.all([
         Task.countDocuments({ user: userId }),
         Task.countDocuments({ user: userId, completed: true })

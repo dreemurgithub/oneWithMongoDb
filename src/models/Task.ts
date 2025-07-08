@@ -39,6 +39,6 @@ taskSchema.index({ user: 1, completed: 1 });
 taskSchema.index({ createdAt: -1 });
 
 // Create and export the Task model
-const Task: Model<ITask> = mongoose.model<ITask>('Task', taskSchema);
+// const Task: Model<ITask> = mongoose.model<ITask>('Task', taskSchema);
 
-export default Task;
+export default taskSchema;

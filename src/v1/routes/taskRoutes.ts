@@ -9,7 +9,7 @@ import {
   toggleTaskCompletion,
   deleteTask,
   markTasksAsCompleted,
-  searchTasks,
+  // searchTasks,
   getTaskStatsByUser
 } from '@/v1/controllers/taskController';
 
@@ -22,7 +22,7 @@ router.post('/', createTask);
 router.get('/', getAllTasks);
 
 // GET /api/tasks/search - Search tasks by description
-router.get('/search', searchTasks);
+// router.get('/search', searchTasks);
 
 // GET /api/tasks/:id - Get task by ID
 router.get('/:id', getTaskById);

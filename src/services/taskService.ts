@@ -294,47 +294,47 @@ export class TaskService {
   /**
    * Search tasks by description
    */
-  static async searchTasks(
-    searchTerm: string,
-    userId?: string | mongoose.Types.ObjectId,
-    page: number = 1,
-    limit: number = 10
-  ): Promise<{
-    tasks: ITask[];
-    total: number;
-    page: number;
-    pages: number;
-  }> {
-    try {
-      const skip = (page - 1) * limit;
-      const query: any = {
-        description: { $regex: searchTerm, $options: 'i' }
-      };
+  // static async searchTasks(
+  //   searchTerm: string,
+  //   userId?: string | mongoose.Types.ObjectId,
+  //   page: number = 1,
+  //   limit: number = 10
+  // ): Promise<{
+  //   tasks: ITask[];
+  //   total: number;
+  //   page: number;
+  //   pages: number;
+  // }> {
+  //   try {
+  //     const skip = (page - 1) * limit;
+  //     const query: any = {
+  //       description: { $regex: searchTerm, $options: 'i' }
+  //     };
 
-      if (userId) {
-        query.user = userId;
-      }
+  //     if (userId) {
+  //       query.user = userId;
+  //     }
 
-      const [tasks, total] = await Promise.all([
-        Task.find(query)
-          .populate('user', 'name username')
-          .skip(skip)
-          .limit(limit)
-          .sort({ createdAt: -1 }),
-        Task.countDocuments(query)
-      ]);
+  //     const [tasks, total] = await Promise.all([
+  //       Task.find(query)
+  //         .populate('user', 'name username')
+  //         .skip(skip)
+  //         .limit(limit)
+  //         .sort({ createdAt: -1 }),
+  //       Task.countDocuments(query)
+  //     ]);
 
-      return {
-        tasks,
-        total,
-        page,
-        pages: Math.ceil(total / limit)
-      };
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`Failed to search tasks: ${error.message}`);
-      }
-      throw new Error('Failed to search tasks: Unknown error');
-    }
-  }
+  //     return {
+  //       tasks,
+  //       total,
+  //       page,
+  //       pages: Math.ceil(total / limit)
+  //     };
+  //   } catch (error) {
+  //     if (error instanceof Error) {
+  //       throw new Error(`Failed to search tasks: ${error.message}`);
+  //     }
+  //     throw new Error('Failed to search tasks: Unknown error');
+  //   }
+  // }
 }
