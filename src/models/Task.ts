@@ -20,23 +20,27 @@ const taskSchema = new Schema<ITask>({
     maxlength: 500
   },
   // One-to-Many relationship: Each task belongs to one user
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  completed: {
-    type: Boolean,
-    default: false
-  }
+  // user: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'User',
+  //   required: true
+  // },
+  // completed: {
+  //   type: Boolean,
+  //   default: false
+  // }
 }, {
-  timestamps: true
+  // timestamps: true
 });
 
+// const taskSchema = new Schema({
+//   description: String
+// });
+
 // Indexes for better query performance
-taskSchema.index({ user: 1 });
-taskSchema.index({ user: 1, completed: 1 });
-taskSchema.index({ createdAt: -1 });
+// taskSchema.index({ user: 1 });
+// taskSchema.index({ user: 1, completed: 1 });
+// taskSchema.index({ createdAt: -1 });
 
 // Create and export the Task model
 // const Task: Model<ITask> = mongoose.model<ITask>('Task', taskSchema);
