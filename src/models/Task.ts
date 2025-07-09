@@ -5,7 +5,12 @@ import { IUser } from './User';
 export interface ITask extends Document {
   _id: mongoose.Types.ObjectId;
   description: string;
-  user: PopulatedDoc<IUser>; // Can be ObjectId or populated User document
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  // user: PopulatedDoc<IUser>; // Can be ObjectId or populated User document
   completed: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -20,11 +25,11 @@ const taskSchema = new Schema<ITask>({
     maxlength: 500
   },
   // One-to-Many relationship: Each task belongs to one user
-  // user: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'User',
-  //   required: true
-  // },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   // completed: {
   //   type: Boolean,
   //   default: false

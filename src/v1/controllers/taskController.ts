@@ -14,7 +14,7 @@ export const createTask = async (
   if(user){
     const task = new Task({
       description,
-      user
+      user: user._id
     })
     task.save()
     res.send(task)

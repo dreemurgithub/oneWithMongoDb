@@ -36,6 +36,11 @@ const userSchema = new Schema<IUser>({
 }, {
   timestamps: true // Adds createdAt and updatedAt fields automatically
 });
+userSchema.virtual('tasks', {
+  ref: 'task',           // Model to populate from
+  localField: '_id',     // Field in User (this document)
+  foreignField: 'user' // Field in Post that matches localField
+});
 
 
 // these works
