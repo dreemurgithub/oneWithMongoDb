@@ -31,7 +31,8 @@ export const getTaskById = async (
   res: Response
 ): Promise<void> => {
   const {id} = req.params
-  const task = await Task.findById(id)
+  const task = await Task.findById(id).populate('userInfo')
+  // const task = await Task.findById(id)
   if(task){
     res.send(task)
     return

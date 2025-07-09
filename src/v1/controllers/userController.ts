@@ -30,11 +30,12 @@ export const getUserById = async (
   res: Response
 ): Promise<void> => {
   const { id } = req.params;
-  const tasks = await Task.find({ user: id });
+  // const tasks = await Task.find({ user: id });
+  // Task;
   const user = await User.findById(id).populate('tasks')
   // const user = await User.findById(id)
   if (user) {
-    res.send({ user, tasks });
+    res.send(user);
     return;
   }
   res.status(500).json({

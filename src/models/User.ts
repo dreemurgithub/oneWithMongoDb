@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 import dotenv from "dotenv";
+import { Task } from ".";
 dotenv.config();
 // User interface for TypeScript
 export interface IUser extends Document {
@@ -9,7 +10,6 @@ export interface IUser extends Document {
   name: string;
   createdAt: Date;
   updatedAt: Date;
-  taskList?: mongoose.Types.ObjectId[]; // Virtual field
 }
 
 // work, finally
@@ -34,21 +34,19 @@ const userSchema = new Schema<IUser>(
       // trim: true,
       // maxlength: 100
     },
-    taskList: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
   },
   {
     timestamps: true, // Adds createdAt and updatedAt fields automatically
   }
 );
-userSchema.set('toJSON', { virtuals: true }); // ?
-userSchema.set('toObject', { virtuals: true }); // ?
+userSchema.set("toJSON", { virtuals: true }); // ?
+userSchema.set("toObject", { virtuals: true }); // ?
 
 // userSchema.virtual("tasks", {
 //   ref: "Task", // Model to populate from
 //   localField: "_id", // Field in User (this document)
 //   foreignField: "user", // Field in Post that matches localField
 // });
-
 
 // these works
 // const userSchema = new mongoose.Schema({
@@ -63,12 +61,12 @@ userSchema.set('toObject', { virtuals: true }); // ?
 //   name: String,
 // });
 
-// Virtual field for User to get their tasks (One-to-Many relationship)
-// userSchema.virtual('tasks', {
-//   ref: 'Task', // The model to use
-//   localField: '_id', // Find tasks where `localField`
-//   foreignField: 'user' // is equal to `foreignField`
-// });
+// Do this from inside the schema and with the model too, inside ref=> string
+userSchema.virtual("tasks", {
+  ref: "Task", // The model to use
+  localField: "_id", // Find tasks where `localField`
+  foreignField: "user", // is equal to `foreignField`
+});
 
 // // Ensure virtual fields are serialized
 // userSchema.set('toJSON', { virtuals: true });

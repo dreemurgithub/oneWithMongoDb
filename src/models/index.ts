@@ -17,8 +17,15 @@ export const Task = mongoose.model("tasks", taskSchema);
 export const User = mongoose.model("users", userSchema);
 
 userSchema.virtual("tasks", {
-  ref: "Task", // Model to populate from
+  ref: Task, // we can refer to string, but dont
   localField: "_id", // Field in User (this document)
   foreignField: "user", // Field in Post that matches localField
 });
-// export const User: Model<IUser> = mongoose.model<IUser>('users', userSchema);
+
+taskSchema.virtual('userInfo', {
+  ref: User,
+  localField: 'user',
+  foreignField: '_id',
+  justOne: true // Only one user per task
+});
+

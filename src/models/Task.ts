@@ -40,9 +40,13 @@ const taskSchema = new Schema<ITask>({
 taskSchema.set('toJSON', { virtuals: true });
 taskSchema.set('toObject', { virtuals: true }); // ?
 
-// const taskSchema = new Schema({
-//   description: String
-// });
+// Do this from inside the schema and with the model too, inside ref=> string
+taskSchema.virtual('userInfo', {
+  ref: 'User',
+  localField: 'user',
+  foreignField: '_id',
+  justOne: true // Only one user per task
+});
 
 // Indexes for better query performance
 // taskSchema.index({ user: 1 });
