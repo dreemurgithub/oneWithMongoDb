@@ -30,6 +30,12 @@ export const getTaskById = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+  const {id} = req.params
+  const task = await Task.findById(id)
+  if(task){
+    res.send(task)
+    return
+  }
   res.status(500).json({
     error: "Failed to get task",
   });
