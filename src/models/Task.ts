@@ -35,7 +35,7 @@ const taskSchema = new Schema<ITask>({
   //   default: false
   // }
 }, {
-  // timestamps: true
+  timestamps: true
 });
 
 // const taskSchema = new Schema({

@@ -3,6 +3,7 @@ dotenv.config();
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 mongoose.connect(`${process.env.MONGODB_URI}/taskmanager`);
+mongoose.set('strictPopulate', false); // to populate, a must, it work
 
 // Import schemas
 import userSchema, { IUser } from "./User";

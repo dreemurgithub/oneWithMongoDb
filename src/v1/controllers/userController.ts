@@ -1,7 +1,7 @@
 // controllers/userController.ts
 import { Request, Response } from "express";
 // import { UserService } from "@/services/userService";
-import { User,Task } from "@/models";
+import { User, Task } from "@/models";
 
 // Create a new user
 export const createUser = async (
@@ -30,10 +30,12 @@ export const getUserById = async (
   res: Response
 ): Promise<void> => {
   const { id } = req.params;
-  const user = await User.findById(id)
-  if(user){
-    res.send(user)
-    return
+  const tasks = await Task.find({ user: id });
+  const user = await User.findById(id).populate('tasks')
+  // const user = await User.findById(id)
+  if (user) {
+    res.send({ user, tasks });
+    return;
   }
   res.status(500).json({
     error: "Failed to get user",
