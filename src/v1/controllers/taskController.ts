@@ -1,5 +1,6 @@
 // controllers/taskController.ts
 import { Request, Response } from "express";
+import { Task,User } from "@/models";
 // import { TaskService } from '@/services/taskService';
 // import { UserService } from '@/services/userService';
 
@@ -8,6 +9,17 @@ export const createTask = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+  const { userId, description } = req.body;
+  const user = await User.findById(userId)
+  if(user){
+    const task = new Task({
+      description,
+      user
+    })
+    task.save()
+    res.send(task)
+    return
+  }
   res.status(500).json({
     error: "Failed to create task",
   });
