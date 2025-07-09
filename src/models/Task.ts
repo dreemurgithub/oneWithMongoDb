@@ -37,6 +37,8 @@ const taskSchema = new Schema<ITask>({
 }, {
   timestamps: true
 });
+taskSchema.set('toJSON', { virtuals: true });
+taskSchema.set('toObject', { virtuals: true }); // ?
 
 // const taskSchema = new Schema({
 //   description: String

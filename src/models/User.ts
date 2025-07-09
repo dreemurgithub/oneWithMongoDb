@@ -9,41 +9,45 @@ export interface IUser extends Document {
   name: string;
   createdAt: Date;
   updatedAt: Date;
-  tasks?: mongoose.Types.ObjectId[]; // Virtual field
+  taskList?: mongoose.Types.ObjectId[]; // Virtual field
 }
 
 // work, finally
-const userSchema = new Schema<IUser>({
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-    // trim: true,
-    // minlength: 3,
-    // maxlength: 30
+const userSchema = new Schema<IUser>(
+  {
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      // trim: true,
+      // minlength: 3,
+      // maxlength: 30
+    },
+    password: {
+      type: String,
+      // required: true,
+      // minlength: 6
+    },
+    name: {
+      type: String,
+      required: true,
+      // trim: true,
+      // maxlength: 100
+    },
+    taskList: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
   },
-  password: {
-    type: String,
-    // required: true,
-    // minlength: 6
-  },
-  name: {
-    type: String,
-    required: true,
-    // trim: true,
-    // maxlength: 100
+  {
+    timestamps: true, // Adds createdAt and updatedAt fields automatically
   }
-}, {
-  timestamps: true // Adds createdAt and updatedAt fields automatically
-});
-// userSchema.set('toJSON', { virtuals: true }); // ?
-// userSchema.set('toObject', { virtuals: true }); // ?
+);
+userSchema.set('toJSON', { virtuals: true }); // ?
+userSchema.set('toObject', { virtuals: true }); // ?
 
-userSchema.virtual('tasks', {
-  ref: 'Task',           // Model to populate from
-  localField: '_id',     // Field in User (this document)
-  foreignField: 'user' // Field in Post that matches localField
-});
+// userSchema.virtual("tasks", {
+//   ref: "Task", // Model to populate from
+//   localField: "_id", // Field in User (this document)
+//   foreignField: "user", // Field in Post that matches localField
+// });
 
 
 // these works
