@@ -1,7 +1,16 @@
-import { HydratedDocument, Document } from "mongoose";
+import { HydratedDocument, Document,PopulatedDoc } from "mongoose";
 import { IUser } from "@/models/User";
 import { User } from "@/models";
-export const userSerializer = (object: IUser | IUser[]) => {
+import { IBoard } from "@/models/Board";
+import { ITask } from "@/models/Task";
+
+interface IUserPopulated extends Omit<IUser, 'tasks' | 'boards'> {
+  tasks?: PopulatedDoc<ITask>[];
+  boards?: PopulatedDoc<IBoard>[];
+}
+
+
+export const userSerializer = (object: IUserPopulated | IUserPopulated[]) => {
   if (Array.isArray(object)) {
     return object.map((u) => {
       return {
@@ -10,6 +19,7 @@ export const userSerializer = (object: IUser | IUser[]) => {
         name: u.name,
         createdAt: u.createdAt,
         updatedAt: u.updatedAt,
+        tasks: u.tasks
       };
     });
   }
@@ -19,5 +29,6 @@ export const userSerializer = (object: IUser | IUser[]) => {
     name: object.name,
     createdAt: object.createdAt,
     updatedAt: object.updatedAt,
+    tasks: object.tasks
   };
 };
