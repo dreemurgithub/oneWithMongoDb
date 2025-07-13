@@ -9,20 +9,23 @@ export const createTask = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { userId, description } = req.body;
-  const user = await User.findById(userId)
-  if(user){
-    const task = new Task({
-      description,
-      user: user._id
-    })
-    task.save()
-    res.send(task)
-    return
+  try{
+    const { userId, description } = req.body;
+    const user = await User.findById(userId)
+    if(user){
+      const task = new Task({
+        description,
+        user: user._id
+      })
+      task.save()
+      res.send(task)
+      return
+    }
+  } catch(error){
+    res.status(500).json({
+      error
+    });
   }
-  res.status(500).json({
-    error: "Failed to create task",
-  });
 };
 
 // Get task by ID
@@ -30,16 +33,19 @@ export const getTaskById = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const {id} = req.params
-  const task = await Task.findById(id).populate('userInfo')
-  // const task = await Task.findById(id)
-  if(task){
-    res.send(task)
-    return
+  try{
+    const {id} = req.params
+    const task = await Task.findById(id).populate('userInfo')
+    // const task = await Task.findById(id)
+    if(task){
+      res.send(task)
+      return
+    }
+  } catch(error){
+    res.status(500).json({
+      error
+    });
   }
-  res.status(500).json({
-    error: "Failed to get task",
-  });
 };
 
 // Get all tasks with filters and pagination
@@ -67,12 +73,15 @@ export const updateTask = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { id } = req.params;
-  const { description, completed } = req.body;
+  try {
+    const { id } = req.params;
+    const { description, completed } = req.body;
+  } catch (error) {
+    res.status(500).json({
+      error
+    });
+  }
 
-  res.status(500).json({
-    error: "Failed to update task",
-  });
 };
 
 // Toggle task completion

@@ -8,20 +8,24 @@ export const createUser = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { username, name, password } = req.body;
-  if (!username || !name || !password) {
-    res.status(400);
-    return;
+  try {
+    const { username, name, password } = req.body;
+    if (!username || !name || !password) {
+      res.status(400);
+      return;
+    }
+    const user = new User({ name, username, password });
+    if (user) {
+      await user.save();
+      res.send(user);
+      return;
+    }
+  } catch(error){
+    res.status(500).json({
+      error
+    });
+
   }
-  const user = new User({ name, username, password });
-  if (user) {
-    await user.save();
-    res.send(user);
-    return;
-  }
-  res.status(500).json({
-    error: "Failed to create user",
-  });
 };
 
 // Get user by ID
@@ -29,18 +33,21 @@ export const getUserById = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { id } = req.params;
-  // const tasks = await Task.find({ user: id });
-  // Task;
-  const user = await User.findById(id).populate('tasks').populate('boards')
-  // const user = await User.findById(id)
-  if (user) {
-    res.send(user);
-    return;
+  try {
+    const { id } = req.params;
+    // const tasks = await Task.find({ user: id });
+    // Task;
+    const user = await User.findById(id).populate('tasks').populate('boards')
+    // const user = await User.findById(id)
+    if (user) {
+      res.send(user);
+      return;
+    }
+  } catch(error){
+    res.status(500).json({
+      error,
+    });
   }
-  res.status(500).json({
-    error: "Failed to get user",
-  });
 };
 
 // Get user with their tasks
