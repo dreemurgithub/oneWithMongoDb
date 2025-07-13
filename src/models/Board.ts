@@ -7,11 +7,11 @@ export interface IBoard extends Document {
   _id: mongoose.Types.ObjectId;
   name: string;
   description?: string;
-  members: [{
+  members: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     require: true
-  }],
+  }[],
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

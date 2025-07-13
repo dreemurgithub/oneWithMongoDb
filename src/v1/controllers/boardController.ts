@@ -30,7 +30,7 @@ export const getBoardById = async (
   res: Response
 ): Promise<void> => {
   const { id } = req.params;
-  const board = await Board.findById(id).populate("ownerInfor");  // const task = await Task.findById(id)
+  const board = await Board.findById(id).populate("ownerInfor"); // const task = await Task.findById(id)
   if (board) {
     res.send(board);
     return;
@@ -60,24 +60,42 @@ export const getBoardsByUser = async (
   });
 };
 
-// Update task
+// Update Board
 export const updateBoard = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   const { id } = req.params;
-  const { description, completed } = req.body;
-
+  const { description, name } = req.body;
+  const board = await Board.findById(id).populate("ownerInfor").populate('users')
+  if (board) {
+    board.description = description;
+    board.name = name;
+    res.send(board);
+    return;
+  }
   res.status(500).json({
     error: "Failed to update Board",
   });
 };
 
 // Toggle Board completion
-export const toggleBoardCompletion = async (
+export const addMemberToBoard = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+  const { id } = req.params;
+  const { userId } = req.body;
+  const board = await Board.findById(id).populate("users").populate('ownerInfor'); // const task = await Task.findById(id)
+  const user = await User.findById(userId)
+  if (board && user ) {
+    if(board.owner.toString() !== user.id && !board.members.includes(user.id)){
+      board.members.push(user.id)
+      board.save()
+    }
+    res.send(board);
+    return;
+  }
   res.status(500).json({
     error: "Failed to toggle Board completion",
   });
