@@ -32,7 +32,7 @@ export const getUserById = async (
   const { id } = req.params;
   // const tasks = await Task.find({ user: id });
   // Task;
-  const user = await User.findById(id).populate('tasks')
+  const user = await User.findById(id).populate('tasks').populate('boards')
   // const user = await User.findById(id)
   if (user) {
     res.send(user);
@@ -58,8 +58,7 @@ export const getAllUsers = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const users = await User.find();
-
+  const users = await User.find().populate('tasks');
   res.send(users);
 };
 

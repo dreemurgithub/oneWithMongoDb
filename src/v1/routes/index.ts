@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import userRoutes from './userRoutes';
 import taskRoutes from './taskRoutes';
+import boardRoutes from './boardRoutes'
 
 const routerV1 = Router();
 
@@ -30,5 +31,6 @@ routerV1.get('/', (req, res) => {
 // Mount route modules
 routerV1.use('/users', userRoutes);
 routerV1.use('/tasks', taskRoutes);
+routerV1.use('/boards', boardRoutes);
 
 export default routerV1;

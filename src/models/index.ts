@@ -23,6 +23,11 @@ userSchema.virtual("tasks", {
   localField: "_id", // Field in User (this document)
   foreignField: "user", // Field in Post that matches localField
 });
+userSchema.virtual("boards", {
+  ref: Board, // The model to use
+  localField: "_id", // Find tasks where `localField`
+  foreignField: "members", // is equal to `foreignField`
+});
 
 taskSchema.virtual("userInfo", {
   ref: User,
@@ -30,9 +35,15 @@ taskSchema.virtual("userInfo", {
   foreignField: "_id",
   justOne: true, // Only one user per task
 });
-boardSchema.virtual("owernerInfor",{
-  ref:User,
+boardSchema.virtual("owernerInfor", {
+  ref: User,
   justOne: true,
-  foreignField: '_id',
-  localField: 'owner',
-})
+  foreignField: "_id",
+  localField: "owner",
+});
+boardSchema.virtual("users", {
+  ref: User, // The model to use
+  localField: "members", // Find tasks where `localField`
+  foreignField: "_id", // is equal to `foreignField`
+});
+
