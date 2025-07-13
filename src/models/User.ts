@@ -67,6 +67,11 @@ userSchema.virtual("tasks", {
   localField: "_id", // Find tasks where `localField`
   foreignField: "user", // is equal to `foreignField`
 });
+userSchema.virtual("boards", {
+  ref: "Board", // The model to use
+  localField: "_id", // Find tasks where `localField`
+  foreignField: "members", // is equal to `foreignField`
+});
 
 // // Ensure virtual fields are serialized
 // userSchema.set('toJSON', { virtuals: true });
