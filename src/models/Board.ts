@@ -60,6 +60,12 @@ boardSchema.virtual("users", {
   localField: "members", // Find tasks where `localField`
   foreignField: "_id", // is equal to `foreignField`
 });
+boardSchema.virtual("ownerInfor", {
+  ref: 'User',
+  justOne: true,
+  foreignField: "_id",
+  localField: "owner",
+});
 
 // Indexes for better query performance
 // boardSchema.index({ owner: 1 });

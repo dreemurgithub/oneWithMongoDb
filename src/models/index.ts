@@ -35,7 +35,7 @@ taskSchema.virtual("userInfo", {
   foreignField: "_id",
   justOne: true, // Only one user per task
 });
-boardSchema.virtual("owernerInfor", {
+boardSchema.virtual("ownerInfor", {
   ref: User,
   justOne: true,
   foreignField: "_id",

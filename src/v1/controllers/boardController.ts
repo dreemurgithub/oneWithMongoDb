@@ -1,25 +1,26 @@
 // controllers/taskController.ts
 import { Request, Response } from "express";
-import { Task,User,Board } from "@/models";
+import { Task, User, Board } from "@/models";
 // import { UserService } from '@/services/userService';
 
 export const createBoard = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { userId, description } = req.body;
-  const user = await User.findById(userId)
-  if(user){
-    const task = new Task({
+  const { ownerId, description, name } = req.body;
+  const user = await User.findById(ownerId);
+  if (user) {
+    const board = new Board({
       description,
-      user: user._id
-    })
-    task.save()
-    res.send(task)
-    return
+      name,
+      owner: ownerId,
+    });
+    board.save();
+    res.send(board);
+    return;
   }
   res.status(500).json({
-    error: "Failed to create task",
+    error: "Failed to create board",
   });
 };
 
@@ -28,12 +29,11 @@ export const getBoardById = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const {id} = req.params
-  const task = await Task.findById(id).populate('userInfo')
-  // const task = await Task.findById(id)
-  if(task){
-    res.send(task)
-    return
+  const { id } = req.params;
+  const board = await Board.findById(id).populate("ownerInfor");  // const task = await Task.findById(id)
+  if (board) {
+    res.send(board);
+    return;
   }
   res.status(500).json({
     error: "Failed to get task",
