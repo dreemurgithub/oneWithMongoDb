@@ -22,7 +22,7 @@ export const createTask = async (
       return
     }
   } catch(error){
-    res.status(500).json({
+    res.status(400).json({
       error
     });
   }
@@ -42,7 +42,7 @@ export const getTaskById = async (
       return
     }
   } catch(error){
-    res.status(500).json({
+    res.status(400).json({
       error
     });
   }
@@ -53,7 +53,7 @@ export const getAllTasks = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to get tasks",
   });
 };
@@ -63,7 +63,7 @@ export const getTasksByUser = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to get user tasks",
   });
 };
@@ -77,7 +77,7 @@ export const updateTask = async (
     const { id } = req.params;
     const { description, completed } = req.body;
   } catch (error) {
-    res.status(500).json({
+    res.status(400).json({
       error
     });
   }
@@ -89,7 +89,7 @@ export const toggleTaskCompletion = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to toggle task completion",
   });
 };
@@ -99,7 +99,7 @@ export const deleteTask = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to delete task",
   });
 };
@@ -109,7 +109,7 @@ export const markTasksAsCompleted = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to mark tasks as completed",
   });
 };
@@ -119,7 +119,7 @@ export const searchTasks = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to search tasks",
   });
 };
@@ -129,7 +129,7 @@ export const getTaskStatsByUser = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to get task statistics",
   });
 };

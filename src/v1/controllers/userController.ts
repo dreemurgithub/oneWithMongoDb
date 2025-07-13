@@ -2,7 +2,7 @@
 import { Request, Response } from "express";
 // import { UserService } from "@/services/userService";
 import { User, Task } from "@/models";
-
+import { userSerializer } from "@/v1/serializer/UserSerializer";
 // Create a new user
 export const createUser = async (
   req: Request,
@@ -17,11 +17,11 @@ export const createUser = async (
     const user = new User({ name, username, password });
     if (user) {
       await user.save();
-      res.send(user);
+      res.send(userSerializer(user));
       return;
     }
   } catch(error){
-    res.status(500).json({
+    res.status(400).json({
       error
     });
 
@@ -40,11 +40,11 @@ export const getUserById = async (
     const user = await User.findById(id).populate('tasks').populate('boards')
     // const user = await User.findById(id)
     if (user) {
-      res.send(user);
+      res.send(userSerializer(user));
       return;
     }
   } catch(error){
-    res.status(500).json({
+    res.status(400).json({
       error,
     });
   }
@@ -55,7 +55,7 @@ export const getUserWithTasks = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to get user with tasks",
   });
 };
@@ -66,7 +66,7 @@ export const getAllUsers = async (
   res: Response
 ): Promise<void> => {
   const users = await User.find().populate('tasks');
-  res.send(users);
+  res.send(userSerializer(users));
 };
 
 // Update user
@@ -74,7 +74,7 @@ export const updateUser = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to update user",
   });
 };
@@ -84,7 +84,7 @@ export const deleteUser = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to delete user",
   });
 };
@@ -94,7 +94,7 @@ export const getUserTaskStats = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to get user task statistics",
   });
 };

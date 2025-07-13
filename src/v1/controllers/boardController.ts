@@ -19,7 +19,7 @@ export const createBoard = async (
     res.send(board);
     return;
   }
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to create board",
   });
 };
@@ -35,7 +35,7 @@ export const getBoardById = async (
     res.send(board);
     return;
   }
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to get task",
   });
 };
@@ -45,7 +45,7 @@ export const getAllBoards = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to get Boards",
   });
 };
@@ -55,7 +55,7 @@ export const getBoardsByUser = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to get user Boards",
   });
 };
@@ -76,7 +76,7 @@ export const updateBoard = async (
       return;
     }
   }catch(error){
-    res.status(500).json({
+    res.status(400).json({
       error
     });
   }
@@ -101,7 +101,7 @@ export const addMemberToBoard = async (
       return;
     }
   } catch(error){
-    res.status(500).json({
+    res.status(400).json({
       error
     });
   }
@@ -112,7 +112,7 @@ export const deleteBoard = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to delete Board",
   });
 };
@@ -122,7 +122,7 @@ export const markBoardsAsCompleted = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to mark Boards as completed",
   });
 };
@@ -132,7 +132,7 @@ export const searchBoards = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to search Boards",
   });
 };
@@ -142,7 +142,7 @@ export const getBoardstatsByUser = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  res.status(500).json({
+  res.status(400).json({
     error: "Failed to get Board statistics",
   });
 };

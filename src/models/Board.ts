@@ -35,7 +35,7 @@ const boardSchema = new Schema<IBoard>(
     description: {
       type: String,
       trim: true,
-      maxlength: 500,
+      maxlength: 400,
     },
     // Many-to-Many relationship: Board can have multiple Users as members
     members: [

@@ -22,7 +22,7 @@ const taskSchema = new Schema<ITask>({
     type: String,
     required: true,
     trim: true,
-    maxlength: 500
+    maxlength: 400
   },
   // One-to-Many relationship: Each task belongs to one user
   user: {
